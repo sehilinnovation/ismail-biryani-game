@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ismail Biryani — QR Code</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Rajdhani:wght@400;600;700&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #e8e4d8;
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: flex-start;
+      font-family: 'Rajdhani', sans-serif;
+      padding: 40px 20px 60px; min-height: 100vh;
+    }
+
+    .print-btn {
+      margin-bottom: 20px; padding: 12px 32px;
+      background: #7a1515; color: #d4c060;
+      border: none; border-radius: 10px;
+      font-family: 'Playfair Display', serif; font-size: .75rem; font-weight: 700;
+      letter-spacing: .08em; cursor: pointer;
+      box-shadow: 0 4px 16px rgba(122,21,21,.4);
+    }
+
+    .card {
+      position: relative; width: 380px; border-radius: 20px; overflow: hidden;
+      display: flex; flex-direction: column; align-items: center;
+      background: #09070a;
+      box-shadow: 0 8px 40px rgba(5,3,8,.6), 0 2px 8px rgba(0,0,0,.4);
+    }
+
+    /* Dark header */
+    .header-block {
+      width: 100%; background: linear-gradient(160deg, #09070a 0%, #1e1408 100%);
+      display: flex; flex-direction: column; align-items: center;
+      padding: 28px 26px 22px;
+      border-bottom: 2px solid rgba(184,160,48,0.25);
+    }
+
+    .logo-border {
+      width: 110px; height: 110px;
+      background: #ffffff;
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 14px;
+      box-shadow: 0 2px 16px rgba(0,0,0,.5), 0 0 0 3px rgba(184,160,48,0.3);
+      padding: 6px;
+    }
+
+    .logo-img { width: 98px; height: 98px; object-fit: contain; }
+
+    h1 {
+      font-family: 'Playfair Display', serif; font-size: 1.65rem; font-weight: 900;
+      letter-spacing: .04em; text-align: center; line-height: 1.2;
+      background: linear-gradient(180deg, #ffffff 0%, #d4c060 50%, #b8a030 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      margin-bottom: 4px;
+    }
+
+    .tagline {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: .62rem; color: rgba(255,255,255,0.5);
+      letter-spacing: .22em; text-transform: uppercase; margin-bottom: 8px;
+    }
+
+    .group-pill {
+      margin-top: 2px;
+      background: rgba(184,160,48,0.12); border: 1px solid rgba(184,160,48,0.35);
+      border-radius: 20px; padding: 3px 14px;
+      font-family: 'Rajdhani', sans-serif; font-size: .68rem; font-weight: 700;
+      color: #d4c060; letter-spacing: .1em; text-transform: uppercase;
+    }
+
+    /* White body section */
+    .body-block {
+      width: 100%; background: #ffffff;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 20px 24px 0;
+    }
+
+    .scan-label {
+      font-size: .65rem; color: #7a1515; letter-spacing: .16em;
+      text-transform: uppercase; margin-bottom: 12px; font-weight: 700;
+    }
+
+    .qr-wrap {
+      background: #fff; border-radius: 14px; padding: 10px;
+      border: 3px solid #7a1515;
+      position: relative; margin-bottom: 16px;
+      box-shadow: 0 4px 20px rgba(122,21,21,.12);
+    }
+
+    .prizes-strip {
+      display: flex; gap: 6px; flex-wrap: wrap;
+      justify-content: center; margin-bottom: 16px; width: 100%;
+    }
+
+    .prize-chip {
+      background: #fdf8ee; border: 1px solid rgba(184,160,48,.3);
+      border-radius: 20px; padding: 3px 10px;
+      font-size: .62rem; color: #7a5010;
+      font-weight: 700; letter-spacing: .03em; white-space: nowrap;
+    }
+
+    .divider {
+      width: 100%; height: 2px;
+      background: linear-gradient(90deg, transparent, #b8a030, transparent);
+      opacity: .4; margin-bottom: 14px;
+    }
+
+    /* Dark address block */
+    .address-block {
+      width: 100%; background: linear-gradient(135deg, #09070a, #1e1408);
+      padding: 14px 24px 12px;
+      text-align: center;
+      border-top: 1px solid rgba(184,160,48,0.2);
+    }
+
+    .branch-name {
+      font-family: 'Playfair Display', serif; font-size: .95rem; font-weight: 700;
+      color: #d4c060; letter-spacing: .04em; margin-bottom: 4px;
+    }
+
+    .location {
+      font-size: .68rem; color: rgba(255,255,255,.65);
+      letter-spacing: .03em; line-height: 1.6;
+    }
+
+    /* White footer */
+    .footer-strip {
+      width: 100%; background: #ffffff;
+      border-top: 2px solid #b8a030;
+      padding: 8px 24px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+
+    .footer-strip .dev { font-size: .58rem; color: #999; letter-spacing: .04em; }
+    .footer-strip .dev span { color: #7a1515; font-weight: 800; }
+    .footer-strip .phone { font-size: .62rem; color: #7a1515; font-weight: 700; letter-spacing: .04em; }
+
+    @page { size: 380px 670px; margin: 0; }
+
+    @media print {
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+      html { width: 380px !important; height: 670px !important; margin: 0 !important; padding: 0 !important; }
+      body { width: 380px !important; min-height: 670px !important; background: #e8e4d8 !important;
+             margin: 0 !important; padding: 0 !important; display: block !important; }
+      .print-btn { display: none !important; }
+      .card { width: 380px !important; border-radius: 0 !important; box-shadow: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <button class="print-btn" onclick="window.print()">⬇ Download PDF</button>
+
+  <div class="card">
+
+    <!-- DARK HEADER -->
+    <div class="header-block">
+      <div class="logo-border">
+        <img class="logo-img" src="logo.png" alt="Ismail Biryani"
+          onerror="this.parentElement.innerHTML='🍛';" />
+      </div>
+      <h1>Ismail Biryani</h1>
+      <div class="tagline">Authentic Flavours · Ongole</div>
+      <div class="group-pill">Ismail Group</div>
+    </div>
+
+    <!-- WHITE BODY -->
+    <div class="body-block">
+      <div class="scan-label">⬇ Scan &amp; Win Exciting Prizes ⬇</div>
+
+      <div class="qr-wrap">
+        <div id="qrcode"></div>
+      </div>
+
+      <div class="prizes-strip">
+        <span class="prize-chip">🍛 Free Chicken Dum 2pc Biryani</span>
+      </div>
+
+      <div class="divider"></div>
+    </div>
+
+    <!-- DARK ADDRESS -->
+    <div class="address-block">
+      <div class="branch-name">Ismail Biryani — Ongole</div>
+      <div class="location">📍 Ongole, Andhra Pradesh</div>
+    </div>
+
+    <!-- WHITE FOOTER -->
+    <div class="footer-strip">
+      <div class="dev">Developed by <span>SEHIL</span></div>
+      <div class="phone">📞 +91 92460 39666</div>
+    </div>
+
+  </div>
+
+<script>
+  new QRCode(document.getElementById('qrcode'), {
+    text: 'https://sehilinnovation.github.io/ismail-biryani-game/',
+    width: 220, height: 220,
+    colorDark: '#09070a', colorLight: '#ffffff',
+    correctLevel: QRCode.CorrectLevel.H
+  });
+</script>
+</body>
+</html>
