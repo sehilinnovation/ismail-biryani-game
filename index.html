@@ -445,7 +445,7 @@
       if (!phone)                  { showStatus('Please enter your phone number.', 'error'); return; }
       if (!/^\d{10}$/.test(phone)) { showStatus('Phone number must be exactly 10 digits.', 'error'); return; }
       submitBtn.disabled = true; showStatus('Saving your details…', '');
-      try { await fetch(`${SHEET_URL}?${new URLSearchParams({ name, phone })}`, { method: 'GET', mode: 'no-cors' }); } catch (_) {}
+      try { await fetch(`${SHEET_URL}?${new URLSearchParams({ action: 'register', name, phone })}`, { method: 'GET', mode: 'no-cors' }); } catch (_) {}
       showStatus('', ''); switchToGame();
     });
 
